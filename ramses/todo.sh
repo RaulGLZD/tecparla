@@ -30,7 +30,7 @@ DIR_REC=$DIR_WRK/Rec/$NOM
 LIST_MOD=$DIR_WRK/Lis/vocales.lis
 
 FIC_RES=$DIR_WRK/Res/$NOM.res
-[ -d $(dirname $FIC_RES )] || mkdir -p $(dirname $FIC_RES )
+[ -d $(dirname $FIC_RES) ] || mkdir -p $(dirname $FIC_RES )
 
 EXEC="parametriza.py -p $DIR_PRM -s $DIR_SEN $GUI_ENT $GUI_DEV"
 $PRM && echo $EXEC && $EXEC || exit 1
