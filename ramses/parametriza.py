@@ -6,11 +6,12 @@ from ramses.util import *
 from ramses.prm import *
 from tqdm import tqdm
 
-def parametriza(dirPrm, dirSen, *guiSen):
+
+def parametriza(dirPrm, dirSen, *guiSen, funcPrm=np.array):
     for fichero in tqdm(leeLis(*guiSen)):
         pathSen = pathName(dirSen, fichero, 'wav')
         sen, fm = sf.read(pathSen)
-        prm = sen.copy()
+        prm = funcPrm(sen)
         pathPrm = pathName(dirPrm, fichero, 'prm')
         chkPathName(pathPrm)
         escrPrm(pathPrm, prm)
@@ -30,7 +31,8 @@ Usage:
 Opciones:
     --dirPrm, -p PATH   directorio con las señales parametrizadas
     --dirSen, -s PATH   directorio con las señales de entrada
-
+    --execPre,-x SCRIPTS  scripts a ejecutar antes de la parametrizacion
+    --funcPrm,-f EXPR   Expresion que proporciona la funcion de parametrizacion [default: np.array]
 Diccionario:
     <guiSen> fichero/s guia.
     roollo roollo rolololo. :)
@@ -39,5 +41,12 @@ Diccionario:
     dirPrm = args['--dirPrm']
     dirSen = args['--dirSen']
     guiSen = args['<guiSen>']
+    
+    scripts = args['--execPre']
+    if scripts:
+        for script in scripts.split(','):
+            exec(open(script).exec())
+    
+    funcPrm =eval(args['--funcPrm'])
 
-    parametriza(dirPrm, dirSen, *guiSen)
+    parametriza(dirPrm, dirSen, *guiSen, funcPrm=funcPrm)
