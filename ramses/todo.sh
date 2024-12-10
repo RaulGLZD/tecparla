@@ -35,15 +35,25 @@ LIST_MOD=$DIR_WRK/Lis/vocales.lis
 FIC_RES=$DIR_WRK/Res/$NOM.res
 [ -d $(dirname $FIC_RES) ] || mkdir -p $(dirname $FIC_RES )
 
-FUNC_PRM=trivial
-EXEC_PRE=$DIR_PRM/$FUNC_PRM
+NUM_COEF=32
+EPS=10
+FUNC_PRM=blackmanTukey
+EXEC_PRE=$DIR_PRM/$FUNC_PRM.py
 [ -d $(dirname $EXEC_PRE) ] || mkdir -p $(dirname $EXEC_PRE )
-echo "def $FUNC_PRM(x): return x" | tee $EXEC_PRE
+echo "import numpy as np" | tee $EXEC_PRE
+echo "def $FUNC_PRM(x): " | tee -a $EXEC_PRE
+echo "  N = len(x)" | tee -a $EXEC_PRE
+echo "  orden = $NUM_COEF" | tee -a $EXEC_PRE
+echo "  cor = np.correlate(x, x, mode='full')" | tee -a $EXEC_PRE
+echo "  wcor = cor[N-orden-1:N+orden] * np.bartlett(2*orden+1)" | tee -a $EXEC_PRE
+echo "  return np.log(np.abs(np.fft.fft(wcor,n = N))**2 + $EPS)" | tee -a $EXEC_PRE
+
+
 execPre="-x $EXEC_PRE"
 funcPrm="-f $FUNC_PRM"
-dirPrm= "-p $DIR_PRM"
-dirSen= "-s $DIR_WRK"
-EXEC="parametriza.py -p $DIR_PRM -s $DIR_SEN $GUI_ENT $GUI_DEV"
+dirPrm="-p $DIR_PRM"
+dirSen="-s $DIR_SEN"
+EXEC="parametriza.py $dirPrm $dirSen $execPre $funcPrm $GUI_ENT $GUI_DEV"
 $PRM && echo $EXEC && $EXEC || exit 1
 
 dirPrm="-p $DIR_PRM"
