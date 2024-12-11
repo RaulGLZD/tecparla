@@ -6,25 +6,30 @@ import matplotlib.pyplot as plt
 from ramses.util import *
 from ramses.mar import *
 from ramses.prm import *
+from euclideo import Euclidi
 from tqdm import tqdm
 
 def entrena(dirPrm, dirMar, lisFon, ficMod, *figGui):
-    unidades = leeLis(lisFon)
-    total = {unidad : 0 for unidad in unidades}
-    numFon = {unidad : 0 for unidad in unidades}
-    modelo = {}
+    #CONSTRUIMOS el modelo inical
+    modelo = Euclidi(lisFon)
+    #INICIALIZAMOS las estructuras iniciales para el entrenamiento
+    modelo.inicMod()
+
+    #BUCLE para todas las señales
     for señal in tqdm(leeLis(*figGui)):
         pathMar = pathName(dirMar, señal, 'mar')
         unidad = cogeTRN(pathMar)
         pathPrm = pathName(dirPrm, señal, 'prm')
         prm = leePrm(pathPrm)
-        total[unidad] += prm
-        numFon[unidad] += 1
-    for unidad in unidades: 
-        modelo[unidad] = total[unidad] / numFon[unidad]
-    chkPathName(ficMod)
-    with open(ficMod, 'wb' ) as fpMod:
-        np.save(fpMod, modelo)
+        #INCORPORAMOS la informacion de la señal al modelo
+        modelo.addPrm(prm, unidad)
+    #RECALCULAMOS el modelo
+    modelo.recaMod()
+    #MOSTRAMOS en pantalla la evolucion del entrenamiento
+    modelo.printEvo()
+
+    #ESCRIBIMOS el modelo generado
+    modelo.escMod(ficMod)
 
 if __name__ == '__main__':
     from docopt import docopt
