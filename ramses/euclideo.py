@@ -2,9 +2,16 @@ import numpy as np
 from util import *
 
 class Euclidi:
-    def __init__(self, lisFon):
-        self.unidades = leeLis(lisFon)
-        self.modelo = {}
+    def __init__(self, * , lisFon=None, ficMod=None):
+        if lisFon and ficMod or not (lisFon or ficMod):
+            raise("ERROR: lisFon o ficMod han de ser distintos de None")
+        if lisFon: 
+            self.unidades = leeLis(lisFon)
+            self.modelo = {}
+        else:
+            with open(ficMod, 'rb') as fpMod:
+                self.modelo = np.load(fpMod, allow_pickle=True).item()
+                self.unidades = self.modelo.keys()
 
     def inicMod(self):
         self.total = {unidad : 0 for unidad in self.unidades}
@@ -30,3 +37,13 @@ class Euclidi:
         chkPathName(ficMod)
         with open(ficMod, 'wb' ) as fpMod:
             np.save(fpMod, self.modelo)
+    
+    def __call__(self, prm):
+        minDist = np.inf
+        for unidad in self.unidades:
+            distancia = np.sum((prm - self.modelo[unidad])**2)
+            if distancia < minDist:
+                minDist = distancia
+                reconocidi = unidad
+        return reconocidi, -minDist
+        

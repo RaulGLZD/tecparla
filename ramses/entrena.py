@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 from ramses.util import *
 from ramses.mar import *
 from ramses.prm import *
-from euclideo import Euclidi
+from gaussiano import Gaussia
 from tqdm import tqdm
 
 def entrena(dirPrm, dirMar, lisFon, ficMod, *figGui):
     #CONSTRUIMOS el modelo inical
-    modelo = Euclidi(lisFon)
+    modelo = Gaussia(lisFon=lisFon)
     #INICIALIZAMOS las estructuras iniciales para el entrenamiento
     modelo.inicMod()
 

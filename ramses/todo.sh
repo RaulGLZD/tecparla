@@ -14,7 +14,7 @@ hostname
 pwd
 date
 
-PRM=false
+PRM=true
 ENT=true
 REC=true
 EVA=true
@@ -35,14 +35,14 @@ LIST_MOD=$DIR_WRK/Lis/vocales.lis
 FIC_RES=$DIR_WRK/Res/$NOM.res
 [ -d $(dirname $FIC_RES) ] || mkdir -p $(dirname $FIC_RES )
 
-NUM_COEF=32
+NUM_COEF=48
 EPS=10
 FUNC_PRM=mfcc
 EXEC_PRE=$DIR_PRM/$FUNC_PRM.py
 [ -d $(dirname $EXEC_PRE) ] || mkdir -p $(dirname $EXEC_PRE )
-echo "from python_speech_features import mfcc" | tee $EXEC_PRE
-# echo "def $FUNC_PRM(x): " | tee -a $EXEC_PRE
-# echo "  N = len(x)" | tee -a $EXEC_PRE
+echo "from python_speech_features import mfcc as mfcc_" | tee $EXEC_PRE
+echo "def $FUNC_PRM(x): " | tee -a $EXEC_PRE
+echo "  return mfcc_(x, samplerate=8000, winlen=0.064, winstep=0.064, numcep=$NUM_COEF, nfilt=48)[0]" | tee -a $EXEC_PRE
 # echo "  orden = $NUM_COEF" | tee -a $EXEC_PRE
 # echo "  cor = np.correlate(x, x, mode='full')" | tee -a $EXEC_PRE
 # echo "  wcor = cor[N-orden-1:N+orden] * np.bartlett(2*orden+1)" | tee -a $EXEC_PRE
