@@ -1,7 +1,7 @@
 	a	e	i	o	u
-a	356	6	0	37	1
-e	3	371	24	0	2
-i	0	36	358	1	5
-o	27	8	0	326	39
-u	5	2	3	37	353
-Porcentaje de acierto = 88.20%
+a	372	2	0	22	4
+e	3	378	13	0	6
+i	1	26	366	1	6
+o	14	5	0	330	51
+u	1	1	3	54	341
+Porcentaje de acierto = 89.35%

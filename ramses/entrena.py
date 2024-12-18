@@ -9,9 +9,9 @@ from ramses.prm import *
 from gaussiano import Gaussia
 from tqdm import tqdm
 
-def entrena(dirPrm, dirMar, lisFon, ficMod, *figGui):
+def entrena(dirPrm, dirMar, lisFon, ficMod, Modelo, *figGui):
     #CONSTRUIMOS el modelo inical
-    modelo = Gaussia(lisFon=lisFon)
+    modelo = Modelo(lisFon=lisFon)
     #INICIALIZAMOS las estructuras iniciales para el entrenamiento
     modelo.inicMod()
 
@@ -48,6 +48,8 @@ Opciones:
     --dirPrm, -p PATH   directorio con los ficheros resultantes del reconocimiento
     --dirMar, -m PATH   directorio con las transcripciones de las señales [default: .]
     --lisFon, -l PATH  blablabla
+    --execPre,-x SCRIPTS Script de ejecucion previa, se puede indicar mas de un script separado por comas
+    --clsMod, -c CLASE Clase del modelo
     
 
 Diccionario:
@@ -60,5 +62,11 @@ Diccionario:
     dirMar = args['--dirMar']
     ficMod = args['--ficMod']
     figGui = args['<figGui>']
+    execPre = args['--execPre']
+    if execPre:
+        for script in execPre.split(','):
+            exec(open(script).read())
+    clsMod = eval(args['--clsMod'])
 
-    entrena(dirPrm, dirMar,lisFon, ficMod, *figGui)
+
+    entrena(dirPrm, dirMar,lisFon, ficMod, clsMod, *figGui)

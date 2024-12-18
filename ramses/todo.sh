@@ -14,7 +14,7 @@ hostname
 pwd
 date
 
-PRM=true
+PRM=false
 ENT=true
 REC=true
 EVA=true
@@ -35,7 +35,7 @@ LIST_MOD=$DIR_WRK/Lis/vocales.lis
 FIC_RES=$DIR_WRK/Res/$NOM.res
 [ -d $(dirname $FIC_RES) ] || mkdir -p $(dirname $FIC_RES )
 
-NUM_COEF=48
+NUM_COEF=32
 EPS=10
 FUNC_PRM=mfcc
 EXEC_PRE=$DIR_PRM/$FUNC_PRM.py
@@ -60,15 +60,17 @@ dirPrm="-p $DIR_PRM"
 dirMar="-m $DIR_SEN"
 ficMod="-f $FIC_MOD"
 listMod="-l $LIST_MOD"
+execPre="-x ramses/gaussiano.py"
+clsMod="-c Gaussia"
 
-EXEC="entrena.py $dirPrm $dirMar $ficMod $listMod $GUI_ENT"
+EXEC="entrena.py $dirPrm $dirMar $ficMod $execPre $clsMod $listMod $GUI_ENT"
 $ENT && { echo $EXEC && $EXEC || exit 1; }
 
 ficMod="-f $FIC_MOD"
 dirRec="-r $DIR_REC"
 dirPrm="-p $DIR_PRM"
 
-EXEC="reconoce.py $dirPrm $dirRec $ficMod $GUI_DEV"
+EXEC="reconoce.py $dirPrm $dirRec $ficMod $execPre $clsMod $GUI_DEV"
 $REC && { echo $EXEC && $EXEC || exit 1; }
 
 dirRec="-r $DIR_REC"

@@ -19,7 +19,7 @@ class Gaussia:
                 self.unidades = self.media.keys()
             self.gaussiana = {}
             for unidad in self.unidades:
-                self.gaussiana[unidad] = multivariate_normal(mean=self.media, cov=self.varianza, allows_ingular=True)
+                self.gaussiana[unidad] = multivariate_normal(mean=self.media[unidad], cov=self.varianza[unidad], allow_singular=True)
 
 
     def inicMod(self):
@@ -55,7 +55,7 @@ class Gaussia:
     def __call__(self, prm):
         maxProb = -np.inf
         for unidad in self.unidades:
-            probabilidad = self.gaussiana[unidad](prm)
+            probabilidad = self.gaussiana[unidad].logpdf(prm)
             if probabilidad > maxProb:
                 maxProb = probabilidad
                 reconocidi = unidad
